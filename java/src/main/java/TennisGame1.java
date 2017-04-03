@@ -1,9 +1,7 @@
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+
+
 import java.util.Hashtable;
-import java.util.List;
 
 
 public class TennisGame1 implements TennisGame {
@@ -12,8 +10,21 @@ public class TennisGame1 implements TennisGame {
     private int player2Points = 0;
     private final String player1Name;
     private final String player2Name;
+    
+    /**
+     * Dictionary to find scores from given points. 
+     * The key is the points of player1 and player2. The value is the score
+     * equivalent of that point combination. Both key and value are strings, 
+     * and all possible combinations are checked.
+     */ 
     private Hashtable scoreDict;
 
+    /**
+     * Construct an object by setting player names and building the score
+     * dictionary.
+     * @param player1Name String name for player 1.
+     * @param player2Name String name for player 2.
+     */
     public TennisGame1(String player1Name, String player2Name) {
         this.player1Name = player1Name;
         this.player2Name = player2Name;
@@ -22,6 +33,12 @@ public class TennisGame1 implements TennisGame {
         this.populateDictionaryWithScores();
     }
 
+    /**
+     * Increments the player that won the most recent point by one. Only 
+     * increments if the parameter value is a valid player's name. Else it does
+     * nothing.
+     * @param playerName 
+     */
     public void wonPoint(String playerName) {
         if (playerName.equals(player1Name)) {
             player1Points += 1;
@@ -31,6 +48,11 @@ public class TennisGame1 implements TennisGame {
         }
     }
 
+    /**
+     * Returns the score of current game state. The point combination must
+     * already exist in dictionary else it returns null.
+     * @return string describing scores of the two players.
+     */
     public String getScore() {
         String points1 = Integer.toString(player1Points);
         String points2 = Integer.toString(player2Points);
@@ -38,82 +60,13 @@ public class TennisGame1 implements TennisGame {
         
         String score = (String) scoreDict.get(scoreKey);
         return score;
-        
-//        String score;
-//        if (player1Points == player2Points) {
-//            score = getTieScore();
-//        }
-//        else if (player1Points >= 4 || player2Points >= 4) {
-//            score = getWinnerOrAdvantageScore();
-//        }
-//        else {
-//            score = getNonSpecialScore();
-//        }
-//        return score;
     }
 
-    private String getNonSpecialScore() {
-        String score = "";
-        score += convertPointToScore(player1Points);
-        score += "-";
-        score += convertPointToScore(player2Points);
-        return score;
-    }
-
-    private String convertPointToScore(int points) {
-        switch(points) {
-            case 0:
-                return "Love";
-            case 1:
-                return "Fifteen";
-            case 2:
-                return "Thirty";
-            case 3:
-                return "Forty";
-        }
-        return "";
-    }
-
-    private String getWinnerOrAdvantageScore() {
-        String score;
-        int minusResult = player1Points - player2Points;
-        if (minusResult==1) {
-            score ="Advantage player1";
-        }
-        else if (minusResult ==-1) {
-            score ="Advantage player2";
-        }
-        else if (minusResult>=2) {
-            score = "Win for player1";
-        }
-        else {
-            score ="Win for player2";
-        }
-        return score;
-    }
-
-    private String getTieScore() {
-        String score;
-        switch (player1Points) {
-            case 0:
-                score = "Love-All";
-                break;
-            case 1:
-                score = "Fifteen-All";
-                break;
-            case 2:
-                score = "Thirty-All";
-                break;
-            default:
-                score = "Deuce";
-                break;
-                
-        }
-        return score;
-    }
-    
-    
-    
+    /**
+     * Adds key value pairs of every possible score combination to scoreDict.
+     * The key is the points of player1 and player2. The value is the score
+     * equivalent of that point combination.
+     */
     private void populateDictionaryWithScores() {
         scoreDict.put("0, 0", "Love-All" );
         scoreDict.put("1, 1", "Fifteen-All" );
